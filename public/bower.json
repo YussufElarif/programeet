@@ -1,0 +1,21 @@
+{
+  "name": "public",
+  "authors": [
+    "Yussuf Elarif <Vemuez@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "axios": "^0.14.0",
+    "react": "^15.3.2"
+  }
+}
