@@ -1,13 +1,14 @@
 var express = require("express");
 var app = express();
 var mongoose = require("mongoose");
+var routes = require("./routes/routes");
 
-//var routes = require('./config/routes');
+app.set("views", __dirname + "/views");
+app.set('view engine' , 'jsx');
+app.engine('jsx', require('express-react-views').createEngine());
 
-app.use(express.static("public"));
+mongoose.connect('mongodb://localhost/programeet');
 
-//app.use(routes);
+app.use(routes);
 
-app.listen("8080", function(){
-  console.log("listening on port 8080");
-});
+app.listen("8080");
