@@ -8,9 +8,11 @@ var hashHistory = reactRouter.hashHistory;
 var Body = React.createClass({
   render: function(){
     return (
+      <main className="container">
       <Router history={hashHistory}>
         <Route path="/" component={MeetUpList}/>
       </Router>
+      </main>
     )
   }
 });

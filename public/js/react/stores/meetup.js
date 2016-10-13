@@ -23,8 +23,7 @@ function handleAction(payload){
 
 function updateList(){
   axios.get("/api/meetup").then(function(res){
-    _meetups = res.data.results;
-    console.log(_meetups);
+    _meetups = res.data;
     console.log(res);
     MeetUps.emit(ACTION_CONSTANT.MEET_UP_LIST_UPDATE);
   });

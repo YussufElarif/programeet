@@ -48,7 +48,7 @@
 
 	var Main = __webpack_require__(1);
 
-	ReactDOM.render(React.createElement(Main, null), document.getElementById("body"));
+	ReactDOM.render(React.createElement(Main, null), document.getElementById("container"));
 
 /***/ },
 /* 1 */
@@ -58,7 +58,7 @@
 
 	var Header = __webpack_require__(2);
 	var Body = __webpack_require__(99);
-	var Footer = __webpack_require__(107);
+	var Footer = __webpack_require__(110);
 
 	var Main = React.createClass({
 	  displayName: "Main",
@@ -87,26 +87,88 @@
 	var Header = React.createClass({
 	  displayName: "Header",
 
+	  handleLogout: function handleLogout(e) {
+	    e.preventDefault();
+	    axios.post("/logout").then(function (data) {
+	      location.href = "/login";
+	    });
+	  },
 	  render: function render() {
 	    return React.createElement(
-	      "ul",
-	      null,
+	      "header",
+	      { className: "navbar-fixed" },
 	      React.createElement(
-	        "li",
-	        null,
+	        "div",
+	        { className: "row" },
 	        React.createElement(
-	          "a",
-	          { href: "#/" },
-	          "Home"
-	        )
-	      ),
-	      React.createElement(
-	        "li",
-	        null,
-	        React.createElement(
-	          "form",
-	          { action: "/logout", method: "POST" },
-	          React.createElement("input", { type: "submit", value: "logout" })
+	          "nav",
+	          { className: "nav-wrapper amber darken-4" },
+	          React.createElement(
+	            "div",
+	            { className: "col s12" },
+	            React.createElement(
+	              "a",
+	              { href: "/#", className: "brand-logo" },
+	              "Logo"
+	            ),
+	            React.createElement(
+	              "a",
+	              { href: "#", "data-activates": "navigation", className: "button-collapse" },
+	              React.createElement(
+	                "i",
+	                { className: "material-icons" },
+	                "menu"
+	              )
+	            ),
+	            React.createElement(
+	              "ul",
+	              { className: "right hide-on-med-and-down" },
+	              React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                  "a",
+	                  { href: "/#" },
+	                  "Home"
+	                )
+	              ),
+	              React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                  "form",
+	                  { action: "/logout", method: "POST" },
+	                  React.createElement(
+	                    "a",
+	                    { className: "waves-effect waves-light btn", onClick: this.handleLogout },
+	                    "Logout"
+	                  )
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              "ul",
+	              { className: "side-nav center", id: "navigation" },
+	              React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                  "a",
+	                  { href: "/#" },
+	                  "Home"
+	                )
+	              ),
+	              React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                  "a",
+	                  { className: "waves-effect waves-light btn", onClick: this.handleLogout },
+	                  "Logout"
+	                )
+	              )
+	            )
+	          )
 	        )
 	      )
 	    );
@@ -9961,9 +10023,13 @@
 
 	  render: function render() {
 	    return React.createElement(
-	      Router,
-	      { history: hashHistory },
-	      React.createElement(Route, { path: "/", component: MeetUpList })
+	      "main",
+	      { className: "container" },
+	      React.createElement(
+	        Router,
+	        { history: hashHistory },
+	        React.createElement(Route, { path: "/", component: MeetUpList })
+	      )
 	    );
 	  }
 	});
@@ -9978,9 +10044,9 @@
 
 	var MeetUp = __webpack_require__(101);
 	var AppDispatcher = __webpack_require__(102);
-	var MeetUpStore = __webpack_require__(108);
+	var MeetUpStore = __webpack_require__(105);
 
-	var ACTION_CONSTANT = __webpack_require__(106);
+	var ACTION_CONSTANT = __webpack_require__(109);
 
 	var Home = React.createClass({
 	  displayName: "Home",
@@ -10031,22 +10097,40 @@
 	  render: function render() {
 	    return React.createElement(
 	      "div",
-	      { className: "meetup" },
+	      { className: "meetup card padding" },
 	      React.createElement(
-	        "h2",
-	        null,
+	        "h1",
+	        { className: "card-title" },
 	        this.props.meetup.name
 	      ),
 	      React.createElement(
 	        "p",
 	        null,
-	        "desc: ",
-	        this.props.meetup.description
+	        React.createElement(
+	          "strong",
+	          null,
+	          "City: "
+	        ),
+	        this.props.meetup.city
+	      ),
+	      React.createElement(
+	        "div",
+	        null,
+	        React.createElement(
+	          "strong",
+	          null,
+	          "Description: "
+	        ),
+	        React.createElement("p", { dangerouslySetInnerHTML: { __html: this.props.meetup.description } })
 	      ),
 	      React.createElement(
 	        "p",
 	        null,
-	        "members: ",
+	        React.createElement(
+	          "strong",
+	          null,
+	          "Members: "
+	        ),
 	        this.props.meetup.members
 	      )
 	    );
@@ -10321,46 +10405,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ },
-/* 105 */,
-/* 106 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = {
-	  MEET_UP_LIST_UPDATE: "MEET_UP_LIST_UPDATE"
-	};
-
-/***/ },
-/* 107 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var Footer = React.createClass({
-	  displayName: "Footer",
-
-	  render: function render() {
-	    return React.createElement(
-	      "h1",
-	      null,
-	      "footer"
-	    );
-	  }
-	});
-
-	module.exports = Footer;
-
-/***/ },
-/* 108 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var merge = __webpack_require__(109);
-	var EventEmitter = __webpack_require__(111).EventEmitter;
+	var merge = __webpack_require__(106);
+	var EventEmitter = __webpack_require__(108).EventEmitter;
 	var AppDispatcher = __webpack_require__(102);
-	var ACTION_CONSTANT = __webpack_require__(106);
+	var ACTION_CONSTANT = __webpack_require__(109);
 
 	var _meetups = [];
 
@@ -10382,15 +10435,14 @@
 
 	function updateList() {
 	  axios.get("/api/meetup").then(function (res) {
-	    _meetups = res.data.results;
-	    console.log(_meetups);
+	    _meetups = res.data;
 	    console.log(res);
 	    MeetUps.emit(ACTION_CONSTANT.MEET_UP_LIST_UPDATE);
 	  });
 	}
 
 /***/ },
-/* 109 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/*!
@@ -10568,10 +10620,10 @@
 		}
 
 	})(typeof module === 'object' && module && typeof module.exports === 'object' && module.exports);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(110)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(107)(module)))
 
 /***/ },
-/* 110 */
+/* 107 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -10587,7 +10639,7 @@
 
 
 /***/ },
-/* 111 */
+/* 108 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -10893,6 +10945,102 @@
 	  return arg === void 0;
 	}
 
+
+/***/ },
+/* 109 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = {
+	  MEET_UP_LIST_UPDATE: "MEET_UP_LIST_UPDATE"
+	};
+
+/***/ },
+/* 110 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var Footer = React.createClass({
+	  displayName: "Footer",
+
+	  render: function render() {
+	    return React.createElement(
+	      "footer",
+	      { className: "page-footer amber darken-4" },
+	      React.createElement(
+	        "div",
+	        { className: "container" },
+	        React.createElement(
+	          "div",
+	          { className: "row" },
+	          React.createElement(
+	            "div",
+	            { className: "col l6 s12" },
+	            React.createElement(
+	              "h5",
+	              { className: "white-text" },
+	              "Footer Content"
+	            ),
+	            React.createElement(
+	              "p",
+	              { className: "grey-text text-lighten-4" },
+	              "You can use rows and columns here to organize your footer content."
+	            )
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "col l4 offset-l2 s12" },
+	            React.createElement(
+	              "h5",
+	              { className: "white-text" },
+	              "Links"
+	            ),
+	            React.createElement(
+	              "ul",
+	              null,
+	              React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                  "a",
+	                  { className: "grey-text text-lighten-3", href: "#!" },
+	                  "Link 1"
+	                )
+	              ),
+	              React.createElement(
+	                "li",
+	                null,
+	                React.createElement(
+	                  "a",
+	                  { className: "grey-text text-lighten-3", href: "#!" },
+	                  "Link 4"
+	                )
+	              )
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "footer-copyright" },
+	        React.createElement(
+	          "div",
+	          { className: "container" },
+	          "\xA9 2014 Copyright Text",
+	          React.createElement(
+	            "a",
+	            { className: "grey-text text-lighten-4 right", href: "#!" },
+	            "More Links"
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Footer;
 
 /***/ }
 /******/ ]);
