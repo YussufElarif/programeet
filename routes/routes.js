@@ -1,18 +1,31 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-
-var users = require("./controllers/login");
 var validation = require("./controllers/validation");
-
-app.use(validation.auth);
+var web = require("./controllers/index");
+var login = require("./controllers/login");
+var logout = require("./controllers/logout");
+var register = require("./controllers/register");
+//API
+var meetup = require("./controllers/api/meetup");
 
 router.route('/login')
-      .get(users.index)
-      .post(users.login);
+      .get(login.index)
+      .post(login.post);
 
-app.use(validation.api);
+router.route('/register')
+      .get(register.index)
+      .post(register.create);
+
+//app.use(validation.auth);
 
 router.route('/')
+      .get(validation.auth, web.index);
+
+router.route('/logout')
+      .post(logout.post);
+
+router.route('/api/meetup')
+      .get(validation.auth, meetup.index);
 
 module.exports = router;

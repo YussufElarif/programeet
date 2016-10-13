@@ -1,14 +1,36 @@
 var express = require("express");
 var app = express();
 var mongoose = require("mongoose");
-var routes = require("./routes/routes");
+var bodyParser = require('body-parser');
+//multipart uploads in forms
+//  var multer = require("multer");
+//redis used for session management
+//  var redis = require("redis-url").parse("some URL");
+//to use redis
+//  var connect = require("connect-redis");
+//  ASYNC - a good library in npm
+//  Promise - ec6
 
-app.set("views", __dirname + "/views");
-app.set('view engine' , 'jsx');
-app.engine('jsx', require('express-react-views').createEngine());
+var routes = require("./routes/routes");
+var session = require('express-session');
+var scss = require("./scss/style");
+
+
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
 
 mongoose.connect('mongodb://localhost/programeet');
 
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: 'programeetToken'
+}));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(routes);
+
 
 app.listen("8080");
