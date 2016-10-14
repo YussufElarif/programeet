@@ -8,6 +8,8 @@ function index(req, res){
   var api = "/find/groups" + params;
   //check if exists in database, if not, store in database, return from database
   //use small functions to execute this
+  //https://www.pissedconsumer.com/themes/foundation/images/featured_placeholder-400x300.png
+  //Store image above within database to reference empty image
 
   rest.get(base + api).on("complete", function(result){
     return res.json(result)

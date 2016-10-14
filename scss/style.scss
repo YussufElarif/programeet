@@ -1,3 +1,55 @@
+main{
+  margin:auto;
+  padding:0 10px;
+  min-height: 100vh;
+}
+
 .padding {
   padding:3px 15px;
+}
+
+.meetups.row {
+  margin:auto;
+  .sortby-dropdown {
+    display:inline-block;
+  }
+  .meetup.card {
+    display:inline-block;
+    .card-image {
+      div {
+        background-position: center;
+        background-size:cover;
+        background-repeat:no-repeat;
+        height:200px;
+      }
+    }
+    .card-content {
+      .card-title {
+        white-space:nowrap;
+        overflow-x:hidden;
+        text-overflow:ellipsis;
+      }
+    }
+    .card-action {
+      a {
+        width:100%;
+      }
+    }
+  }
+}
+
+.loading-icon {
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-left:-37px;
+  margin-top:-37px;
+}
+
+.sortby-dropdown {
+  margin-bottom:10px;
+}
+
+.container {
+  padding:0 10px;
 }

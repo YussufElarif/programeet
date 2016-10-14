@@ -58,7 +58,7 @@
 
 	var Header = __webpack_require__(2);
 	var Body = __webpack_require__(99);
-	var Footer = __webpack_require__(110);
+	var Footer = __webpack_require__(113);
 
 	var Main = React.createClass({
 	  displayName: "Main",
@@ -109,7 +109,7 @@
 	            React.createElement(
 	              "a",
 	              { href: "/#", className: "brand-logo" },
-	              "Logo"
+	              "Programeet"
 	            ),
 	            React.createElement(
 	              "a",
@@ -136,13 +136,9 @@
 	                "li",
 	                null,
 	                React.createElement(
-	                  "form",
-	                  { action: "/logout", method: "POST" },
-	                  React.createElement(
-	                    "a",
-	                    { className: "waves-effect waves-light btn", onClick: this.handleLogout },
-	                    "Logout"
-	                  )
+	                  "a",
+	                  { className: "waves-effect waves-light btn", onClick: this.handleLogout },
+	                  "Logout"
 	                )
 	              )
 	            ),
@@ -10024,11 +10020,13 @@
 	  render: function render() {
 	    return React.createElement(
 	      "main",
-	      { className: "container" },
+	      null,
 	      React.createElement(
 	        Router,
 	        { history: hashHistory },
-	        React.createElement(Route, { path: "/", component: MeetUpList })
+	        React.createElement(Route, { path: "/", component: MeetUpList }),
+	        React.createElement(Route, { path: "/popular", component: MeetUpList }),
+	        React.createElement(Route, { path: "/new", component: MeetUpList })
 	      )
 	    );
 	  }
@@ -10043,8 +10041,10 @@
 	"use strict";
 
 	var MeetUp = __webpack_require__(101);
+	var Loading = __webpack_require__(110);
+	var DropDownList = __webpack_require__(111);
 	var AppDispatcher = __webpack_require__(102);
-	var MeetUpStore = __webpack_require__(105);
+	var MeetUpStore = __webpack_require__(112);
 
 	var ACTION_CONSTANT = __webpack_require__(109);
 
@@ -10053,32 +10053,39 @@
 
 	  componentDidMount: function componentDidMount() {
 	    AppDispatcher.dispatch({
-	      action: ACTION_CONSTANT.MEET_UP_LIST_UPDATE
+	      action: ACTION_CONSTANT.MEET_UP_LIST_UPDATE,
+	      type: this.props.location.pathname
 	    });
 	    MeetUpStore.on(ACTION_CONSTANT.MEET_UP_LIST_UPDATE, this.handleAction);
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
-	      meetups: MeetUpStore.getList()
+	      meetups: MeetUpStore.getList(),
+	      loading: true
 	    };
 	  },
 	  handleAction: function handleAction() {
 	    this.setState({
-	      meetups: MeetUpStore.getList()
+	      meetups: MeetUpStore.getList(),
+	      loading: false
 	    });
+	    console.log(this.state.loading);
 	  },
 	  render: function render() {
+	    //Add a sortby list at the top
 	    return React.createElement(
 	      "div",
-	      { className: "meetups" },
+	      { className: "meetups row" },
 	      React.createElement(
 	        "h1",
 	        null,
-	        "Meetup"
+	        "Find your favourite groups"
 	      ),
+	      React.createElement(DropDownList, null),
+	      this.state.loading ? React.createElement(Loading, null) : React.createElement("div", null),
 	      this.state.meetups.map(function (meetup, i) {
 	        return React.createElement(MeetUp, { key: i, meetup: meetup, index: i });
-	      }.bind(this))
+	      })
 	    );
 	  }
 	});
@@ -10087,51 +10094,77 @@
 
 /***/ },
 /* 101 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+
+	var AppDispatcher = __webpack_require__(102);
+	var Favourite = __webpack_require__(105);
+	var ACTION_CONSTANT = __webpack_require__(109);
 
 	var MeetUp = React.createClass({
 	  displayName: "MeetUp",
 
+	  handleFavourite: function handleFavourite() {
+	    //save the favourites in the database
+	    //create a new route and page to find all favourites
+	    console.log("dispatch");
+	    AppDispatcher.dispatch({
+	      action: ACTION_CONSTANT.FAVOURITE.POST,
+	      meetup: this.props.meetup.id
+	    });
+	  },
 	  render: function render() {
+	    var img = this.props.meetup.group_photo ? this.props.meetup.group_photo.highres_link : "#";
 	    return React.createElement(
-	      "div",
-	      { className: "meetup card padding" },
+	      "section",
+	      { className: "meetup card col s3" },
 	      React.createElement(
-	        "h1",
-	        { className: "card-title" },
-	        this.props.meetup.name
-	      ),
-	      React.createElement(
-	        "p",
-	        null,
-	        React.createElement(
-	          "strong",
-	          null,
-	          "City: "
-	        ),
-	        this.props.meetup.city
+	        "div",
+	        { className: "card-image" },
+	        React.createElement("div", { style: { backgroundImage: "url(" + img + ")" } })
 	      ),
 	      React.createElement(
 	        "div",
-	        null,
+	        { className: "card-content" },
 	        React.createElement(
-	          "strong",
-	          null,
-	          "Description: "
+	          "h1",
+	          { className: "card-title" },
+	          this.props.meetup.name
 	        ),
-	        React.createElement("p", { dangerouslySetInnerHTML: { __html: this.props.meetup.description } })
+	        React.createElement(
+	          "p",
+	          null,
+	          React.createElement(
+	            "strong",
+	            null,
+	            "City: "
+	          ),
+	          this.props.meetup.city
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          React.createElement(
+	            "strong",
+	            null,
+	            "Members: "
+	          ),
+	          this.props.meetup.members
+	        )
 	      ),
 	      React.createElement(
-	        "p",
-	        null,
+	        "div",
+	        { className: "card-action" },
 	        React.createElement(
-	          "strong",
-	          null,
-	          "Members: "
-	        ),
-	        this.props.meetup.members
+	          "a",
+	          { className: "btn tooltipped amber darken-4", "data-position": "top", "data-delay": "50", "data-tooltip": "Favourite", onClick: this.handleFavourite },
+	          React.createElement(
+	            "i",
+	            { className: "material-icons" },
+	            "star"
+	          )
+	        )
 	      )
 	    );
 	  }
@@ -10415,29 +10448,35 @@
 	var AppDispatcher = __webpack_require__(102);
 	var ACTION_CONSTANT = __webpack_require__(109);
 
-	var _meetups = [];
+	var _favourite = [];
 
-	var MeetUps = merge(EventEmitter.prototype, {
+	var Favourite = merge(EventEmitter.prototype, {
 	  getList: function getList(api, key) {
-	    return _meetups;
+	    return _favourite;
 	  }
 	});
 
-	module.exports = MeetUps;
+	module.exports = Favourite;
 
 	AppDispatcher.register(handleAction);
 
 	function handleAction(payload) {
-	  if (payload.action === ACTION_CONSTANT.MEET_UP_LIST_UPDATE) {
-	    updateList();
+	  console.log(payload);
+	  if (payload.action === ACTION_CONSTANT.FAVOURITE.POST) {
+	    addToFavourite(payload.meetupId);
 	  }
 	}
 
-	function updateList() {
-	  axios.get("/api/meetup").then(function (res) {
-	    _meetups = res.data;
+	function addToFavourite(meetup) {
+	  axios.post("/api/favourite", {
+	    meetupId: meetup,
+	    test: "test",
+	    hello: "teststestse"
+	  }).then(function (res) {
 	    console.log(res);
-	    MeetUps.emit(ACTION_CONSTANT.MEET_UP_LIST_UPDATE);
+	    MeetUps.emit(ACTION_CONSTANT.FAVOURITE.POST);
+	  }).catch(function (err) {
+	    console.log(err);
 	  });
 	}
 
@@ -10953,11 +10992,146 @@
 	"use strict";
 
 	module.exports = {
-	  MEET_UP_LIST_UPDATE: "MEET_UP_LIST_UPDATE"
+	  MEET_UP_LIST_UPDATE: "MEET_UP_LIST_UPDATE",
+	  FAVOURITE: {
+	    GET: "GET_FAVOURITE",
+	    POST: "POST_FAVOURITE"
+	  }
 	};
 
 /***/ },
 /* 110 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var Loading = React.createClass({
+	  displayName: "Loading",
+
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { className: "preloader-wrapper big active center loading-icon" },
+	      React.createElement(
+	        "div",
+	        { className: "spinner-layer spinner-blue-only " },
+	        React.createElement(
+	          "div",
+	          { className: "circle-clipper left" },
+	          React.createElement("div", { className: "circle" })
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "gap-patch" },
+	          React.createElement("div", { className: "circle" })
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "circle-clipper right" },
+	          React.createElement("div", { className: "circle" })
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Loading;
+
+/***/ },
+/* 111 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var DropDownList = React.createClass({
+	  displayName: 'DropDownList',
+
+	  handleChange: function handleChange(e) {
+	    console.log(e);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'sortby-dropdown' },
+	      React.createElement(
+	        'a',
+	        { className: 'dropdown-button btn', href: '#', 'data-activates': 'sortby-dropdown' },
+	        'Sort By',
+	        React.createElement(
+	          'i',
+	          { className: 'material-icons' },
+	          'expand_more'
+	        )
+	      ),
+	      React.createElement(
+	        'ul',
+	        { id: 'sortby-dropdown', className: 'dropdown-content' },
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'a',
+	            { href: '/#/popular' },
+	            'popular'
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'a',
+	            { href: '/#/new' },
+	            'new'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	//<li className="divider"></li>
+
+	module.exports = DropDownList;
+
+/***/ },
+/* 112 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var merge = __webpack_require__(106);
+	var EventEmitter = __webpack_require__(108).EventEmitter;
+	var AppDispatcher = __webpack_require__(102);
+	var ACTION_CONSTANT = __webpack_require__(109);
+
+	var _meetups = [];
+
+	var MeetUps = merge(EventEmitter.prototype, {
+	  getList: function getList(api, key) {
+	    return _meetups;
+	  }
+	});
+
+	module.exports = MeetUps;
+
+	AppDispatcher.register(handleAction);
+
+	function handleAction(payload) {
+	  if (payload.action === ACTION_CONSTANT.MEET_UP_LIST_UPDATE) {
+	    updateList();
+	  }
+	}
+
+	function updateList() {
+	  axios.get("/api/meetup").then(function (res) {
+	    _meetups = res.data;
+	    console.log(res);
+	    MeetUps.emit(ACTION_CONSTANT.MEET_UP_LIST_UPDATE);
+	  });
+	}
+
+/***/ },
+/* 113 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10987,37 +11161,6 @@
 	              "p",
 	              { className: "grey-text text-lighten-4" },
 	              "You can use rows and columns here to organize your footer content."
-	            )
-	          ),
-	          React.createElement(
-	            "div",
-	            { className: "col l4 offset-l2 s12" },
-	            React.createElement(
-	              "h5",
-	              { className: "white-text" },
-	              "Links"
-	            ),
-	            React.createElement(
-	              "ul",
-	              null,
-	              React.createElement(
-	                "li",
-	                null,
-	                React.createElement(
-	                  "a",
-	                  { className: "grey-text text-lighten-3", href: "#!" },
-	                  "Link 1"
-	                )
-	              ),
-	              React.createElement(
-	                "li",
-	                null,
-	                React.createElement(
-	                  "a",
-	                  { className: "grey-text text-lighten-3", href: "#!" },
-	                  "Link 4"
-	                )
-	              )
 	            )
 	          )
 	        )

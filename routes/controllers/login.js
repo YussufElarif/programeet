@@ -10,11 +10,12 @@ function loginGet(req, res){
 
 function loginUser(req, res){
   User.findOne({username: req.body.username}, function(err, user){
-    if (err) return res.status(400).send(err);
+      if (err) return res.status(400).send(err);
       if (!hash.verify(req.body.password, user.password)) return res.send("incorrect password");
 
       var token = jwt.sign({data: req.body.username}, 'programeetToken', {expiresIn: 60*60});
       req.session.token = token;
+      req.user = user.username;
       return res.redirect("/");
   });
 }

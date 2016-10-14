@@ -8,6 +8,7 @@ var logout = require("./controllers/logout");
 var register = require("./controllers/register");
 //API
 var meetup = require("./controllers/api/meetup");
+var favourite = require("./controllers/api/favourite");
 
 router.route('/login')
       .get(login.index)
@@ -26,6 +27,9 @@ router.route('/logout')
       .post(logout.post);
 
 router.route('/api/meetup')
-      .get(validation.auth, meetup.index);
+      .get(validation.api, meetup.index);
+
+router.route('/api/favourite')
+      .post(validation.api, favourite.create);
 
 module.exports = router;

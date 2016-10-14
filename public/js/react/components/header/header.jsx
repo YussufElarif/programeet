@@ -13,12 +13,12 @@ var Header = React.createClass({
         <div className="row">
           <nav className="nav-wrapper amber darken-4">
             <div className="col s12">
-              <a href="/#" className="brand-logo">Logo</a>
+              <a href="/#" className="brand-logo">Programeet</a>
               <a href="#" data-activates="navigation" className="button-collapse"><i className="material-icons">menu</i></a>
 
               <ul className="right hide-on-med-and-down">
                 <li><a href="/#">Home</a></li>
-                <li><form action="/logout" method="POST"><a className="waves-effect waves-light btn" onClick={this.handleLogout}>Logout</a></form></li>
+                <li><a className="waves-effect waves-light btn" onClick={this.handleLogout}>Logout</a></li>
               </ul>
 
               <ul className="side-nav center" id="navigation">
