@@ -20,12 +20,12 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 
-mongoose.connect('mongodb://localhost/programeet');
+mongoose.connect(process.env.PROGRAMEET_MONGO_URL);
 
 app.use(session({
   resave: false,
   saveUninitialized: true,
-  secret: 'programeetToken'
+  secret: process.env.PROGRAMEET_SECRET_SESSION
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -4,7 +4,7 @@ function authCheck(req, res, next) {
     //This function checks if the user is logged in and has a session for private pages
     var token = req.session.token;
     if (token){
-        jwt.verify(token,"programeetToken", function (err){
+        jwt.verify(token,process.env.PROGRAMEET_SECRET_SESSION, function (err){
             if (err){
                 res.redirect('/login');
             } else {
@@ -19,7 +19,7 @@ function authCheck(req, res, next) {
 function apiCheck(req, res, next) {
     var token = req.session.token || req.headers['x-access-token'];
     if (token){
-        jwt.verify(token,"programeetToken", function (err, decoded){
+        jwt.verify(token, process.env.PROGRAMEET_SECRET_SESSION, function (err, decoded){
             if (err){
                 return res.status(401).send({ success: false, message: 'Failed to authenticate token.' });
             } else {

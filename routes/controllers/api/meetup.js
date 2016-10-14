@@ -1,6 +1,6 @@
 var rest = require("restler");
 
-var key = "2fe4d1b211415804b2b5b5d7f60305e";
+var key = process.env.MEETUP_API;
 var base = "https://api.meetup.com";
 
 function index(req, res){

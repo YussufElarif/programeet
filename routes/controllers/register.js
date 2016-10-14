@@ -15,7 +15,7 @@ function registerUser(req, res){
   console.log(req.body);
   User.create({username: req.body.username, password: password}, function(err, user){
     if (err) return res.status(500).send(err);
-      jwt.sign({data: req.body.username}, 'programeetToken', {expiresIn: 60*60});
+      jwt.sign({data: req.body.username}, process.env.PROGRAMEET_SECRET_SESSION, {expiresIn: 60*60});
       res.redirect("/");
   });
 }
